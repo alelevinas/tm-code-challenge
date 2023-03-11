@@ -1,2 +1,0 @@
-[console_scripts]
-cli_devops = cli_devops.main:cli
