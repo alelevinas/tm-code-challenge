@@ -6,7 +6,12 @@ from cli_devops.utils import CONFIG
 
 from cli_devops.utils import Status, ServiceStatus, ServerStatus, resolve_status
 
-def get_servers(url: str) -> List[ServerStatus]:
+
+def connection_check():
+    cpx_client.get_servers(CONFIG['CP_URL'])
+
+
+def get_servers_stats(url: str) -> List[ServerStatus]:
     """
     Returns a list of servers' information: ip, service, status, cpu, memory
     """
@@ -24,7 +29,7 @@ def status(service: str) -> List[ServiceStatus]:
     """
     Stat = NamedTuple('Stat', [('cpu', float), ('mem', float)])
 
-    servers = get_servers(CONFIG['CP_URL'])
+    servers = get_servers_stats(CONFIG['CP_URL'])
     services = defaultdict(list)
     for s in servers:
         if service is not None and service != s.service:
@@ -47,7 +52,7 @@ def unhealthy_services() -> Dict[str, ServerStatus]:
     Returns:
         Dict[str, ServerStatus]: A dictionary with the unhealthy service as a key and a list of all its server's status
     """
-    servers = get_servers(CONFIG['CP_URL'])
+    servers = get_servers_stats(CONFIG['CP_URL'])
     healthy_servers_per_service = defaultdict(int)
     for s in servers:
         if s.status is Status.HEALTHY:
@@ -66,7 +71,7 @@ def service_track(service) -> List[ServerStatus]:
     Returns:
         List[ServerStatus]: _description_
     """
-    servers = get_servers(CONFIG['CP_URL'])
+    servers = get_servers_stats(CONFIG['CP_URL'])
     service_servers = []
     for s in servers:
         if service is not None and service != s.service:
