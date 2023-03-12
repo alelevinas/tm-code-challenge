@@ -1,6 +1,5 @@
 from collections import defaultdict
 from typing import List, NamedTuple, Dict
-from enum import Enum
 import cli_devops.cpx_client as cpx_client
 from cli_devops.utils import CONFIG
 
@@ -8,7 +7,7 @@ from cli_devops.utils import Status, ServiceStatus, ServerStatus, resolve_status
 
 
 def connection_check():
-    cpx_client.get_servers(CONFIG['CP_URL'])
+    cpx_client.get_servers(CONFIG["CP_URL"])
 
 
 def get_servers_stats(url: str) -> List[ServerStatus]:
@@ -27,9 +26,9 @@ def status(service: str) -> List[ServiceStatus]:
     Returns:
         List[ServiceStatus]: A list of each services' CPU and Memory averaged
     """
-    Stat = NamedTuple('Stat', [('cpu', float), ('mem', float)])
+    Stat = NamedTuple("Stat", [("cpu", float), ("mem", float)])
 
-    servers = get_servers_stats(CONFIG['CP_URL'])
+    servers = get_servers_stats(CONFIG["CP_URL"])
     services = defaultdict(list)
     for s in servers:
         if service is not None and service != s.service:
@@ -47,23 +46,24 @@ def status(service: str) -> List[ServiceStatus]:
 
 
 def unhealthy_services() -> Dict[str, ServerStatus]:
-    """Services which have fewer than 2 healthy instances running 
+    """Services which have fewer than 2 healthy instances running
 
     Returns:
         Dict[str, ServerStatus]: A dictionary with the unhealthy service as a key and a list of all its server's status
     """
-    servers = get_servers_stats(CONFIG['CP_URL'])
+    servers = get_servers_stats(CONFIG["CP_URL"])
     healthy_servers_per_service = defaultdict(int)
     for s in servers:
         if s.status is Status.HEALTHY:
             healthy_servers_per_service[s.service] += 1
 
-    # TODO: extraer a conf
-    return [(service, n) for service, n in healthy_servers_per_service.items() if n < 100]
+    return [
+        (service, n) for service, n in healthy_servers_per_service.items() if n < 2
+    ]
 
 
 def service_track(service) -> List[ServerStatus]:
-    """ Get CPU/Memory of all instances of a given service
+    """Get CPU/Memory of all instances of a given service
 
     Args:
         service (str): [Optional] The service to query for
@@ -71,7 +71,7 @@ def service_track(service) -> List[ServerStatus]:
     Returns:
         List[ServerStatus]: _description_
     """
-    servers = get_servers_stats(CONFIG['CP_URL'])
+    servers = get_servers_stats(CONFIG["CP_URL"])
     service_servers = []
     for s in servers:
         if service is not None and service != s.service:

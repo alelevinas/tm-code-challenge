@@ -78,8 +78,8 @@ Sun Mar 12 09:45:43 2023
 This basic CLI is organized in 3 main files.
 
 - *main.py*: Which is responsible for user input and presentation. 
-    - I leverage the ["Click"](asd) framework to simplify CLI standard operations like providing a `--help` or extracting and casting of parameters.
-    - I also made use of the ["tabulate"](url) library for pretty printing of the resulting tables getting some very clean code with just a few lines.
+    - I leverage the ["Click"](https://click.palletsprojects.com/en/8.1.x/) framework to simplify CLI standard operations like providing a `--help` or extracting and casting of parameters.
+    - I also made use of the ["tabulate"](https://github.com/astanin/python-tabulate) library for pretty printing of the resulting tables getting some very clean code with just a few lines.
 
 - *cpx_client.py*: Which is responsible for fetching data from the cps server.
     - This is a very basic client whith only two GET operations.
@@ -106,3 +106,7 @@ This basic CLI is organized in 3 main files.
 - Logging: is limited and only local. On internal devops tools I like showing the full stack trace when there's an exception. If this CLI would be used by a good amount of engineers, I'd also add some external logging to gather data on its usage (and most common errors/bugs)
 
 - Presentation / Data handling: I know I'm sometimes loosing a bit of performance by casting CPU/mem percentages to float and then to a string again, but I prefer that tradeoff for cleaner code by having typed data structures to do the filtering and calculations without having to cast values many times.
+
+- Testing: Moar unit and integration tests would be ideal
+
+- Dockerfile to be able to build and distribute the CLI

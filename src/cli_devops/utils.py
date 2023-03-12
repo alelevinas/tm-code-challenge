@@ -1,4 +1,4 @@
-from typing import List, NamedTuple, Dict
+from typing import NamedTuple
 from enum import Enum
 
 CONFIG = {}
@@ -28,6 +28,6 @@ class ServiceStatus(NamedTuple):
 
 
 def resolve_status(cpu: int, memory: int) -> Status:
-    if cpu > CONFIG['CPU_THRESHOLD'] or memory > CONFIG['MEM_THRESHOLD']:
+    if cpu > CONFIG["CPU_THRESHOLD"] or memory > CONFIG["MEM_THRESHOLD"]:
         return Status.UNHEALTHY
     return Status.HEALTHY
